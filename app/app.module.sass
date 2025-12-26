@@ -1,0 +1,348 @@
+$accent: var(--accent-color)
+$logo: var(--font-caslon)
+$text: var(--text-color)
+$base: var(--base-color)
+
+@mixin flex($j:center, $a:null, $d:column, $g:1px)
+    display: flex
+    flex-direction: $d
+    gap: $g
+    @if $a == null
+        justify-content: $j
+        align-items: $j
+    @else
+        justify-content: $j
+        align-items: $a
+
+@mixin loading($s:20px,$c:10)
+    width: $s
+    height: $s
+    border-left: 1px solid lch(from $text calc(l - $c) c h)
+    border-right: 1px solid lch(from $text calc(l - $c) c h)
+    border-radius: 100%
+    animation: loading .8s linear infinite
+    @keyframes loading
+        100%
+            rotate: 360deg
+
+*
+    &::selection
+        color: $base
+        background-color: $text
+
+.app
+    background-color: lch(from $base calc(l + 6) c h)
+    height: 100svh
+    width: 100vw
+    .col
+        @include flex($j:flex-start)
+        .header,main
+            background-color: $base
+            width: 100vw
+        main
+            height: calc(92svh - 1px)
+            overflow-y: overlay
+            padding: 14px
+            &::-webkit-scrollbar
+                display: none
+        .header
+            height: 8svh
+            @include flex($j:space-between,$a:center,$d:row, $g: 10px)
+            padding: 0px 14px
+            .logo
+                font-family: $logo
+                text-decoration: none
+                font-size: 22px
+                white-space: nowrap
+                color: $text
+            .search
+                width: 100%
+                background-color: lch(from $base calc(l + 4) c h)
+                border-radius: 100px
+                position: relative
+                max-width: 400px
+                input
+                    background-color: transparent
+                    border: none
+                    outline: none
+                    width: 100%
+                    height: 100%
+                    padding: 8.5px 18px
+                    font-size: 12px
+                    color: $text
+                svg
+                    position: absolute
+                    right: 18px
+                    top: 50%
+                    transform: translateY(-50%)
+                    height: 14px
+                    width: 14px
+                    stroke: lch(from $text calc(l - 40) c h)
+            .cta
+                @include flex($j: flex-end,$a:center,$d: row, $g: 10px)
+                .createpostbtn
+                    transition: .1s ease
+                    cursor: pointer
+                    width: 30px
+                    height: 30px
+                    border-radius: 100px
+                    @include flex()
+                    svg
+                        transition: .1s ease
+                        width: 16px
+                        height: 16px
+                        stroke: lch(from $text calc(l - 20) c h)
+                    &:hover
+                        background-color: lch(from $base calc(l + 6) c h)
+                        svg
+                            stroke: $text
+.avatar
+    background-color: lch(from $base calc(l + 6) c h)
+    width: 30px
+    height: 30px
+    border-radius: 100px
+    overflow: hidden
+    img
+        width: 100%
+        height: 100%
+        object-fit: cover
+    .dummy_svg
+        width: 100%
+        height: 100%
+        @include flex($g: 2px)
+        transition: .1s ease
+        .avatar_head_svg,
+        .avatar_body_svg
+            transition: .1s ease
+            background-color: lch(from $base calc(l + 24) c h)
+            height: 8px
+        .avatar_head_svg
+            border-radius: 100px
+            width: 8px
+        .avatar_body_svg
+            border-radius: 7px 7px 100% 100%
+            width: 14px
+        &:hover
+            background-color: lch(from $base calc(l + 12) c h)
+            .avatar_head_svg,
+            .avatar_body_svg
+                background-color: lch(from $base calc(l + 34) c h)
+
+.thought
+    background-color: lch(from $base calc(l + 4) c h)
+    padding: 14px
+    border-radius: 6px
+    @include flex($j:flex-start,$g: 10px)
+    .postheader
+        width: 100%
+        @include flex($j: space-between, $a: center, $d: row, $g:10px )
+        a
+            text-decoration: none
+            font-size: clamp(10px,2.5vw,12px)
+            color: lch(from $text calc(l - 20) c h)
+        svg
+            stroke: lch(from $text calc(l - 20) c h)
+            width: 16px
+            height: 16px
+            cursor: pointer
+            opacity: 0
+    p
+        color: lch(from $text calc(l - 5) c h)
+        font-size: clamp(11px,2.5vw,13px)
+    .cta
+        @include flex($j: space-between, $a: center, $d: row, $g: 14px)
+        margin-top: 6px
+        cursor: pointer
+        .btn
+            @include flex($j: center, $d: row, $g: 6px)
+            svg
+                stroke: lch(from $text calc(l - 20) c h)
+                width: 16px
+                height: 16px
+            span
+                color: lch(from $text calc(l - 20) c h)
+                font-size: 12px
+    &:hover
+        .postheader
+            svg
+                opacity: 1
+.masonry
+    column-count: 5
+    height: fit-content
+    column-gap: 14px
+    @media (max-width: 1200px)
+        columns: 4
+    @media (max-width: 1000px)
+        columns: 3
+    @media (max-width: 760px)
+        columns: 2
+    .thought
+        break-inside: avoid
+        margin-bottom: 14px
+
+.authentication
+    height: 100svh
+    width: 100%
+    padding: 10%
+    .error,
+    .token
+        height: 100%
+        width: 100%
+    .error
+        @include flex($g: 10px)
+        svg
+            stroke: lch(from $text calc(l - 10) c h)
+            width: 50px
+            height: 50px
+        p
+            color: lch(from $text calc(l - 10) c h)
+            font-size: clamp(14px,5vw,40px)
+        button
+            margin-top: 15px
+            cursor: pointer
+            height: 57.6px
+            width: 128.36px
+            border-radius: 8px
+            border: 1px solid lch(from $base calc(l + 16) c h)
+            background-color: transparent
+            @include flex()
+            font-size: 20px
+            color: $text
+            &:hover
+                background-color: $text
+                color: $base
+            @media (max-width:800px)
+                width: 100%
+    .token
+        @include flex($d:row , $g: 10px)
+        .loading
+            @include loading($s:16px)
+        p
+            color: lch(from $text calc(l - 10) c h)
+            font-weight: 300
+            font-size: 13px
+    form
+        @include flex($j: center,$a:flex-start,$g: 14px)
+        height: 100%
+        h2
+            font-family: $logo
+            font-size: clamp(30px,5vw,80px)
+            font-weight: 400
+            color: $text
+        h3
+            font-size: clamp(14px,5vw,40px)
+            color: lch(from $text calc(l - 30) c h)
+            font-weight: 200
+        .loader,a
+            height: 57.6px
+            width: 128.36px
+            border-radius: 8px
+            border: 1px solid lch(from $base calc(l + 16) c h)
+            @include flex()
+            .loading
+                @include loading()
+            @media (max-width:800px)
+                width: 100%
+        a
+            color: lch(from $text calc(l - 30) c h)
+            text-decoration: none
+            cursor: pointer
+            &:hover
+                background-color: $text
+                color: $base
+        h4
+            margin: 10px 0px
+            font-weight: 400
+            color: lch(from $text calc(l - 20) c h)
+            font-size: clamp(12px,2.5vw,14px)
+            max-width: 500px
+            b
+                color: lch(from $text calc(l - 10) c h)
+                font-weight: 500
+        input
+            &[type=submit]
+                transition: .2s ease
+                border-radius: 8px
+                padding: 14px 38px
+                border: none
+                outline: none
+                cursor: pointer
+                font-size: clamp(14px,5vw,23px)
+                color: lch(from $text calc(l - 30) c h)
+                background-color: $text
+                border: 1px solid lch(from $base calc(l + 16) c h)
+                color: $base
+            &[disabled]
+                width: max-content
+                border: 1px solid lch(from $base calc(l + 16) c h)
+                background-color: transparent
+                cursor: default
+                color: $text
+            @media (max-width:800px)
+                width: 100% !important
+        .input
+            margin: 40px 0px
+            width: 100%
+            position: relative
+            border-bottom: 1px solid lch(from $base calc(l + 16) c h)
+            @media (max-width:800px)
+                margin: 10px 0px
+            input
+                width: 100%
+                height: 100%
+                padding: 20px 0px
+                background-color: transparent
+                border: none
+                outline: none
+                font-size: clamp(14px,5vw,30px)
+                font-weight: 200
+                color: $text
+                &::placeholder
+                    color: transparent
+                &:focus,
+                &:not(:placeholder-shown)
+                    ~ p
+                        color: lch(from $text calc(l - 30) c h)
+                        font-size: 12px
+                        top: 2%
+            p
+                transition: .2s ease
+                position: absolute
+                top: 50%
+                transform: translateY(-50%)
+                font-size: clamp(14px,5vw,30px)
+                color: lch(from $text calc(l - 60) c h)
+                pointer-events: none
+                font-weight: 200
+
+.splash
+    height: 100svh
+    @include flex()
+    .logo
+        font-family: $logo
+        font-size: 48px
+        color: $text
+
+.crash
+    height: 100svh
+    @include flex($g:20px)
+    svg
+        stroke: lch(from $text calc(l - 10) c h)
+        width: 60px
+        height: 60px
+        stroke-width: 1.4
+    h1
+        font-size: clamp(16px,2.5vw,28px)
+        font-weight: 400
+        color: $text
+    .btn
+        color: $text
+        cursor: pointer
+        &:nth-child(3)
+            border: 1px solid lch(from $base calc(l + 20) c h)
+            border-radius: 5px
+            padding: 10px 24px
+            margin-top: 4px
+        &:nth-last-child(1)
+            color: lch(from $text calc(l - 40) c h)
+            font-size: 12px
