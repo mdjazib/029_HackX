@@ -1,10 +1,12 @@
 "use client"
 import Header from '@/components/Header'
 import css from "./app.module.sass"
-import React from 'react'
+import React, { useState, useMemo } from 'react'
 import Thought from '@/components/Thought'
 
 const page = () => {
+    const [filterText, setFilterText] = useState("");
+
     const thoughts = [
         {
             username: "itxmuhammadjazib",
@@ -226,13 +228,34 @@ const page = () => {
             shares: 30
         }
     ];
+    
+    const filteredThoughts = useMemo(() => {
+        if (!filterText.trim()) return thoughts;
+        const lower = filterText.toLowerCase();
+        return thoughts.filter(t => 
+            t.thought.toLowerCase().includes(lower) || 
+            t.username.toLowerCase().includes(lower)
+        );
+    }, [filterText]);
+
     return (
         <div className={css.app}>
             <div className={css.col}>
-                <Header css={css} />
+                <Header css={css} onSearch={setFilterText} />
                 <main>
+                    <div className={css.forest_header}>
+                        <h2>The Forest 🌲</h2>
+                        <p>Honest thoughts from honest minds.</p>
+                    </div>
                     <div className={css.masonry}>
-                        {thoughts.map((thought, index) => (<Thought key={index} data={thought} css={css} />))}
+                        {filteredThoughts.length > 0 ? (
+                            filteredThoughts.map((thought, index) => (<Thought key={index} data={thought} css={css} />))
+                        ) : (
+                            <div className={css.empty_state}>
+                                <p>No thoughts found.</p>
+                                <small>Try a different search or browse the forest again.</small>
+                            </div>
+                        )}
                     </div>
                 </main>
             </div>

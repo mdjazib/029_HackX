@@ -22,9 +22,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   const theme = {
     dark: {
-      "--base-color": "lch(3 3.33 72.23)",
-      "--text-color": "lch(100 0 0)",
-      "--accent-color": "lch(69.2 39.86 201.81)",
+      "--base-color": "lch(18 5 80)",
+      "--text-color": "lch(93 4 70)",
+      "--accent-color": "lch(65 40 50)",
     }
   }
   return (

@@ -45,8 +45,34 @@ $base: var(--base-color)
             padding: 14px
             &::-webkit-scrollbar
                 display: none
+            .forest_header
+                margin-bottom: 20px
+                h2
+                    font-family: $logo
+                    font-size: clamp(24px, 5vw, 32px)
+                    color: $text
+                    margin: 0 0 6px 0
+                p
+                    color: lch(from $text calc(l - 20) c h)
+                    font-size: 14px
+                    margin: 0
+            .empty_state
+                width: 100%
+                padding: 60px 20px
+                text-align: center
+                @include flex($g: 10px)
+                p
+                    color: lch(from $text calc(l - 20) c h)
+                    font-size: 16px
+                    margin: 0
+                small
+                    color: lch(from $text calc(l - 40) c h)
+                    font-size: 13px
         .header
             height: 8svh
+            position: sticky
+            top: 0
+            z-index: 10
             @include flex($j:space-between,$a:center,$d:row, $g: 10px)
             padding: 0px 14px
             .logo
@@ -96,6 +122,15 @@ $base: var(--base-color)
                         background-color: lch(from $base calc(l + 6) c h)
                         svg
                             stroke: $text
+            .header_nav
+                @include flex($j:center, $a:center, $d:row, $g: 16px)
+                .nav_link
+                    text-decoration: none
+                    font-size: 13px
+                    color: lch(from $text calc(l - 20) c h)
+                    transition: .2s ease
+                    &:hover
+                        color: $text
 .avatar
     background-color: lch(from $base calc(l + 6) c h)
     width: 30px
@@ -162,6 +197,10 @@ $base: var(--base-color)
             span
                 color: lch(from $text calc(l - 20) c h)
                 font-size: 12px
+            .paw_label
+                &::before
+                    content: "🐾 "
+                    margin-right: 2px
     &:hover
         .postheader
             svg
@@ -346,3 +385,225 @@ $base: var(--base-color)
         &:nth-last-child(1)
             color: lch(from $text calc(l - 40) c h)
             font-size: 12px
+
+.profile
+    display: flex
+    flex-direction: column
+    gap: 18px
+    height: calc(92svh - 1px)
+    overflow-y: overlay
+    padding: 14px
+    &::-webkit-scrollbar
+        display: none
+
+.profile_hero,
+.profile_moodpanel,
+.profile_posts
+    background-color: lch(from $base calc(l + 4) c h)
+    border-radius: 12px
+    padding: 18px
+    border: 1px solid lch(from $base calc(l + 12) c h)
+
+.profile_hero
+    display: grid
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr))
+    gap: 18px
+
+.profile_identity
+    display: grid
+    grid-template-columns: 80px 1fr
+    gap: 14px
+    align-items: center
+    @media (max-width:600px)
+        grid-template-columns: 60px 1fr
+
+.profile_avatar
+    width: 80px
+    height: 80px
+    border-radius: 18px
+    background: linear-gradient(145deg,lch(from $base calc(l + 8) c h),lch(from $base calc(l + 14) c h))
+    color: $text
+    font-size: 28px
+    @include flex()
+    font-family: $logo
+
+.profile_headings h1
+    margin: 2px 0
+    font-size: clamp(20px,3vw,26px)
+    color: $text
+
+.profile_handle
+    color: lch(from $text calc(l - 40) c h)
+    font-size: 12px
+
+.profile_mindset
+    color: lch(from $text calc(l - 10) c h)
+    font-weight: 600
+    margin-bottom: 6px
+
+.profile_about
+    color: lch(from $text calc(l - 15) c h)
+    font-size: 13px
+    line-height: 1.5
+
+.profile_chips
+    margin-top: 10px
+    display: flex
+    flex-wrap: wrap
+    gap: 8px
+    span
+        padding: 8px 10px
+        border-radius: 999px
+        background-color: lch(from $base calc(l + 12) c h)
+        color: lch(from $text calc(l - 10) c h)
+        font-size: 12px
+
+.profile_controls
+    @include flex($a:flex-start,$d:column,$g: 12px)
+
+.profile_toggle_group
+    width: 100%
+    display: grid
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr))
+    gap: 10px
+    button
+        width: 100%
+        border: 1px solid lch(from $base calc(l + 12) c h)
+        background-color: lch(from $base calc(l + 8) c h)
+        color: $text
+        border-radius: 12px
+        padding: 12px
+        cursor: pointer
+        @include flex($a:flex-start,$d:row,$g: 12px)
+        svg
+            width: 18px
+            height: 18px
+            stroke: lch(from $text calc(l - 20) c h)
+        div
+            @include flex($a:flex-start,$d:column,$g: 2px)
+            span
+                font-size: 13px
+                color: $text
+            small
+                color: lch(from $text calc(l - 30) c h)
+                font-size: 11px
+        &:disabled
+            opacity: .5
+            cursor: not-allowed
+        &:hover:enabled
+            background-color: lch(from $base calc(l + 12) c h)
+
+.profile_actions
+    display: flex
+    flex-wrap: wrap
+    gap: 10px
+    button
+        border: 1px solid lch(from $base calc(l + 16) c h)
+        background-color: $text
+        color: $base
+        border-radius: 10px
+        padding: 10px 14px
+        cursor: pointer
+        @include flex($d:row,$g: 8px,$a:center,$j:flex-start)
+        svg
+            width: 16px
+            height: 16px
+        &:hover
+            background-color: lch(from $text calc(l - 10) c h)
+
+.profile_moodpanel
+    @include flex($a:flex-start,$d:column,$g: 14px)
+
+.section_header
+    width: 100%
+    @include flex($a:flex-start,$d:row,$j:space-between,$g: 10px)
+    p
+        color: lch(from $text calc(l - 40) c h)
+        font-size: 12px
+    h3
+        color: $text
+        font-size: clamp(16px,3vw,20px)
+        font-weight: 600
+    span
+        color: lch(from $text calc(l - 30) c h)
+        font-size: 12px
+
+.mood_bars
+    width: 100%
+    display: grid
+    grid-template-columns: 1fr
+    gap: 10px
+
+.mood_bar
+    display: grid
+    grid-template-columns: 120px 1fr 60px
+    gap: 10px
+    align-items: center
+    @media (max-width:700px)
+        grid-template-columns: 80px 1fr 50px
+
+.mood_label
+    text-transform: capitalize
+    font-size: 12px
+    color: lch(from $text calc(l - 20) c h)
+
+.mood_track
+    height: 10px
+    background-color: lch(from $base calc(l + 10) c h)
+    border-radius: 999px
+    overflow: hidden
+    border: 1px solid lch(from $base calc(l + 16) c h)
+
+.mood_fill
+    height: 100%
+    background: linear-gradient(90deg,lch(from $accent calc(l + 10) c h),lch(from $accent calc(l - 6) c h))
+
+.mood_value
+    text-align: right
+    color: $text
+    font-size: 12px
+
+.profile_posts
+    display: flex
+    flex-direction: column
+    gap: 14px
+
+.profile_masonry
+    column-count: 3
+    @media (max-width: 1000px)
+        column-count: 2
+    @media (max-width: 640px)
+        column-count: 1
+
+.profile_thought_card
+    break-inside: avoid
+    margin-bottom: 14px
+    display: flex
+    flex-direction: column
+    gap: 10px
+
+.profile_thought_actions
+    @include flex($d:row,$j:space-between,$a:center,$g: 10px)
+    background-color: lch(from $base calc(l + 8) c h)
+    border: 1px solid lch(from $base calc(l + 14) c h)
+    padding: 10px 12px
+    border-radius: 8px
+    button
+        @include flex($d:row,$a:center,$j:flex-start,$g: 6px)
+        background: none
+        border: none
+        color: $text
+        cursor: pointer
+        font-size: 12px
+        svg
+            width: 14px
+            height: 14px
+            stroke: lch(from $text calc(l - 20) c h)
+        &:hover
+            color: lch(from $text calc(l - 10) c h)
+    .profile_privacy_badge
+        font-size: 11px
+        color: lch(from $text calc(l - 30) c h)
+        padding: 6px 10px
+        border-radius: 999px
+        background-color: lch(from $base calc(l + 12) c h)

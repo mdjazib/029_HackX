@@ -1,0 +1,346 @@
+$accent: var(--accent-color)
+$logo: var(--font-caslon)
+$text: var(--text-color)
+$base: var(--base-color)
+
+@mixin flex($j:center, $a:null, $d:column, $g:1px)
+    display: flex
+    flex-direction: $d
+    gap: $g
+    @if $a == null
+        justify-content: $j
+        align-items: $j
+    @else
+        justify-content: $j
+        align-items: $a
+
+.landing
+    background-color: $base
+    color: $text
+
+.hero
+    height: 100svh
+    @include flex($g: 20px)
+    background: linear-gradient(135deg, lch(from $base calc(l + 2) c h) 0%, lch(from $base calc(l + 4) c h) 100%)
+    padding: 40px 20px
+
+.hero_content
+    @include flex($j:center,$a:center,$g: 16px)
+    text-align: center
+    max-width: 600px
+
+.hero_logo
+    font-size: 80px
+    animation: float 3s ease-in-out infinite
+    @keyframes float
+        0%, 100%
+            transform: translateY(0px)
+        50%
+            transform: translateY(-20px)
+
+.hero h1
+    font-family: $logo
+    font-size: clamp(40px, 8vw, 72px)
+    font-weight: 400
+    margin: 0
+
+.tagline
+    font-size: clamp(18px, 4vw, 28px)
+    color: lch(from $text calc(l - 5) c h)
+    font-weight: 300
+    margin: 0
+
+.subtitle
+    font-size: clamp(14px, 2.5vw, 18px)
+    color: lch(from $text calc(l - 20) c h)
+    max-width: 500px
+    line-height: 1.6
+    margin: 10px 0
+
+.cta_group
+    @include flex($d:row, $j:center, $a:center, $g: 14px)
+    flex-wrap: wrap
+    margin-top: 20px
+
+.cta_primary,
+.cta_secondary
+    text-decoration: none
+    border-radius: 12px
+    padding: 14px 32px
+    font-size: 16px
+    font-weight: 500
+    transition: all .3s ease
+    @include flex($d:row, $j:center, $a:center, $g: 8px)
+    cursor: pointer
+
+.cta_primary
+    background-color: $text
+    color: $base
+    &:hover
+        transform: translateY(-2px)
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2)
+
+.cta_secondary
+    border: 2px solid $text
+    color: $text
+    background-color: transparent
+    &:hover
+        background-color: $text
+        color: $base
+
+.cta_large
+    @extend .cta_primary
+    padding: 16px 48px
+    font-size: 18px
+
+.philosophy
+    padding: 60px 20px
+    background-color: lch(from $base calc(l + 2) c h)
+
+.philosophy_container
+    max-width: 900px
+    margin: 0 auto
+    @include flex($a:flex-start, $g: 20px)
+
+.philosophy h2
+    font-family: $logo
+    font-size: clamp(32px, 6vw, 48px)
+    font-weight: 400
+    width: 100%
+    text-align: center
+
+.philosophy_intro
+    font-size: 18px
+    color: lch(from $text calc(l - 10) c h)
+    line-height: 1.8
+    text-align: center
+
+.pillars
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))
+    gap: 20px
+    width: 100%
+    margin-top: 30px
+
+.pillar
+    background-color: $base
+    padding: 24px
+    border-radius: 12px
+    border: 1px solid lch(from $base calc(l + 12) c h)
+    @include flex($a:flex-start, $g: 14px)
+    text-align: center
+
+.pillar_icon
+    font-size: 40px
+    width: 100%
+
+.pillar h3
+    font-size: 18px
+    margin: 0
+
+.pillar p
+    font-size: 14px
+    color: lch(from $text calc(l - 20) c h)
+    margin: 0
+
+.how_it_works
+    padding: 60px 20px
+    background-color: $base
+
+.how_container
+    max-width: 1000px
+    margin: 0 auto
+    @include flex($a:flex-start, $g: 40px)
+
+.how_it_works h2
+    font-family: $logo
+    font-size: clamp(32px, 6vw, 48px)
+    font-weight: 400
+    width: 100%
+    text-align: center
+
+.steps
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr))
+    gap: 24px
+    width: 100%
+
+.step
+    background-color: lch(from $base calc(l + 4) c h)
+    padding: 28px
+    border-radius: 12px
+    border: 1px solid lch(from $base calc(l + 12) c h)
+    @include flex($a:flex-start, $g: 12px)
+    text-align: left
+
+.step_number
+    font-family: $logo
+    font-size: 32px
+    color: $accent
+    font-weight: 600
+
+.step h3
+    font-size: 18px
+    margin: 0
+
+.step p
+    font-size: 14px
+    color: lch(from $text calc(l - 20) c h)
+    margin: 0
+    line-height: 1.5
+
+.features
+    padding: 60px 20px
+    background-color: lch(from $base calc(l + 2) c h)
+
+.features_container
+    max-width: 1000px
+    margin: 0 auto
+    @include flex($a:flex-start, $g: 40px)
+
+.features h2
+    font-family: $logo
+    font-size: clamp(32px, 6vw, 48px)
+    font-weight: 400
+    width: 100%
+    text-align: center
+
+.features_grid
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr))
+    gap: 24px
+    width: 100%
+
+.feature_card
+    background-color: $base
+    padding: 28px
+    border-radius: 12px
+    border: 1px solid lch(from $base calc(l + 12) c h)
+    @include flex($a:flex-start, $g: 16px)
+    text-align: left
+    transition: all .3s ease
+
+.feature_card svg
+    stroke: $accent
+    width: 32px
+    height: 32px
+    flex-shrink: 0
+
+.feature_card h3
+    font-size: 18px
+    margin: 0
+
+.feature_card p
+    font-size: 14px
+    color: lch(from $text calc(l - 20) c h)
+    margin: 0
+    line-height: 1.5
+
+.feature_card:hover
+    transform: translateY(-4px)
+    border-color: $accent
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1)
+
+.manifesto
+    padding: 80px 20px
+    background-color: $base
+    text-align: center
+
+.manifesto_content
+    max-width: 700px
+    margin: 0 auto
+    @include flex($j:center, $a:center, $g: 40px)
+
+.manifesto h2
+    font-family: $logo
+    font-size: clamp(32px, 6vw, 48px)
+    font-weight: 400
+
+.manifesto_text
+    font-size: 18px
+    color: lch(from $text calc(l - 10) c h)
+    line-height: 2
+    text-align: center
+
+.manifesto_text p
+    margin: 12px 0
+
+.manifesto_final
+    font-size: 24px
+    color: $text
+    font-weight: 500
+
+.footer_cta
+    padding: 80px 20px
+    background-color: lch(from $base calc(l + 4) c h)
+    text-align: center
+    @include flex($j:center, $a:center, $g: 24px)
+
+.footer_cta h2
+    font-family: $logo
+    font-size: clamp(28px, 5vw, 42px)
+    font-weight: 400
+    margin: 0
+
+.footer_cta p
+    font-size: 18px
+    color: lch(from $text calc(l - 20) c h)
+    max-width: 500px
+    margin: 0
+
+.footer
+    padding: 60px 20px
+    background-color: lch(from $base calc(l + 2) c h)
+    border-top: 1px solid lch(from $base calc(l + 12) c h)
+
+.footer_content
+    max-width: 1000px
+    margin: 0 auto
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))
+    gap: 40px
+    margin-bottom: 40px
+
+.footer_section h4
+    font-size: 16px
+    font-weight: 600
+    margin: 0 0 12px 0
+
+.footer_section p
+    font-size: 14px
+    color: lch(from $text calc(l - 20) c h)
+    margin: 0 0 8px 0
+
+.footer_section a
+    display: block
+    font-size: 14px
+    color: $accent
+    text-decoration: none
+    margin-bottom: 8px
+    &:hover
+        text-decoration: underline
+
+.footer_bottom
+    text-align: center
+    border-top: 1px solid lch(from $base calc(l + 12) c h)
+    padding-top: 20px
+    font-size: 13px
+    color: lch(from $text calc(l - 40) c h)
+
+@media (max-width: 768px)
+    .cta_group
+        flex-direction: column
+        width: 100%
+        max-width: 300px
+
+    .cta_primary,
+    .cta_secondary
+        width: 100%
+
+    .pillars,
+    .steps,
+    .features_grid
+        grid-template-columns: 1fr
+
+    .footer_content
+        grid-template-columns: 1fr
