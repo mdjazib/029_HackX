@@ -1,3 +1,5 @@
+@use "sass:math"
+
 $accent: var(--accent-color)
 $logo: var(--font-caslon)
 $text: var(--text-color)
@@ -31,12 +33,13 @@ $base: var(--base-color)
         background-color: $text
 
 .app
-    background: linear-gradient(180deg, lch(from $base calc(l + 2) c h), lch(from $base calc(l + 6) c h), lch(from $base calc(l + 3) c h))
+    background: linear-gradient(135deg, lch(from $base calc(l) c h) 0%, lch(from $base calc(l + 2) c h 280) 25%, lch(from $base calc(l + 3) c h 290) 50%, lch(from $base calc(l + 2) c h 280) 75%, lch(from $base calc(l) c h) 100%)
     height: 100svh
     width: 100vw
     position: relative
+    overflow: hidden
     
-    // Subtle misty overlay
+    // Atmospheric misty overlay for depth
     &::before
         content: ''
         position: absolute
@@ -44,7 +47,20 @@ $base: var(--base-color)
         left: 0
         right: 0
         bottom: 0
-        background: radial-gradient(ellipse at top, lch(from $base calc(l + 8) c h 0.3) 0%, transparent 60%)
+        background: radial-gradient(ellipse at 30% 20%, lch(from $accent calc(l + 8) c h 0.12) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, lch(from $base calc(l + 10) c h 0.15) 0%, transparent 60%)
+        pointer-events: none
+        animation: mistShift 20s ease-in-out infinite
+        
+    // Subtle animated glow layer
+    &::after
+        content: ''
+        position: absolute
+        top: -50%
+        left: -50%
+        right: -50%
+        bottom: -50%
+        background: radial-gradient(circle at 50% 50%, lch(from $accent calc(l + 5) c h 0.06) 0%, transparent 40%)
+        animation: gentleGlow 15s ease-in-out infinite alternate
         pointer-events: none
     .col
         @include flex($j:flex-start)
@@ -94,22 +110,46 @@ $base: var(--base-color)
             position: sticky
             top: 0
             z-index: 10
-            backdrop-filter: blur(20px)
-            background: linear-gradient(180deg, lch(from $base calc(l + 3) c h 0.95), lch(from $base calc(l + 1) c h 0.9))
-            border-bottom: 1px solid lch(from $base calc(l + 8) c h 0.3)
+            backdrop-filter: blur(30px) saturate(180%)
+            background: linear-gradient(180deg, lch(from $base calc(l + 2) c h 0.85), lch(from $base calc(l) c h 0.75))
+            border-bottom: 1px solid lch(from $base calc(l + 12) c h 0.2)
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15)
             @include flex($j:space-between,$a:center,$d:row, $g: 10px)
             padding: 0px 14px
+            transition: all 0.4s ease
+            
+            &:hover
+                backdrop-filter: blur(35px) saturate(200%)
+                background: linear-gradient(180deg, lch(from $base calc(l + 3) c h 0.9), lch(from $base calc(l + 1) c h 0.8))
+                border-bottom-color: lch(from $accent calc(l + 5) c h 0.3)
+            
             .logo
                 font-family: $logo
                 text-decoration: none
                 font-size: 22px
                 white-space: nowrap
                 color: $text
-                transition: all 0.3s ease
+                transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
                 text-shadow: 0 0 20px lch(from $text calc(l - 10) c h 0.3)
+                position: relative
+                
+                &::after
+                    content: ''
+                    position: absolute
+                    bottom: -2px
+                    left: 0
+                    width: 0
+                    height: 1px
+                    background: linear-gradient(90deg, $accent, transparent)
+                    transition: width 0.6s ease
+                
                 &:hover
                     text-shadow: 0 0 30px lch(from $accent calc(l + 10) c h 0.6), 0 0 40px lch(from $accent calc(l + 5) c h 0.4)
-                    letter-spacing: 1px
+                    letter-spacing: 1.5px
+                    transform: translateY(-1px)
+                    
+                    &::after
+                        width: 100%
             .search
                 width: 100%
                 background-color: lch(from $base calc(l + 4) c h)
@@ -193,18 +233,18 @@ $base: var(--base-color)
             filter: drop-shadow(0 0 8px lch(from $accent calc(l + 10) c h 0.6))
 
 .thought
-    background: linear-gradient(135deg, lch(from $base calc(l + 6) c h), lch(from $base calc(l + 4) c h))
-    padding: 24px
-    border-radius: 18px 6px 18px 6px
-    backdrop-filter: blur(10px)
-    border: none
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15)
-    transition: all 0.3s ease
-    @include flex($j:flex-start,$g: 16px)
-    animation: fadeInUp 0.6s ease-out backwards
+    background: linear-gradient(135deg, lch(from $base calc(l + 4) c h 270 / 0.7), lch(from $base calc(l + 2) c h 280 / 0.5))
+    padding: 32px
+    border-radius: 40px 10px 40px 10px
+    backdrop-filter: blur(25px) saturate(200%)
+    border: 1px solid lch(from $accent calc(l + 8) c h 0.25)
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px lch(from $accent calc(l - 20) c h 0.08) inset
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1)
+    @include flex($j:flex-start,$g: 20px)
+    animation: fadeInUp 0.8s ease-out backwards, gentleSway 8s ease-in-out infinite
     position: relative
     
-    // Organic texture overlay (wood pulp/paper)
+    // Subtle texture overlay for organic feel
     &::before
         content: ''
         position: absolute
@@ -212,17 +252,19 @@ $base: var(--base-color)
         left: 0
         right: 0
         bottom: 0
-        border-radius: 18px 6px 18px 6px
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E")
+        border-radius: 40px 10px 40px 10px
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E")
         pointer-events: none
-        opacity: 0.5
+        opacity: 0.6
     
     @for $i from 1 through 20
         &:nth-child(#{$i})
-            animation-delay: calc(#{$i} * 0.05s)
-            // Random vertical offset for natural stagger
-            $offset: random(20) - 10
+            animation-delay: calc(#{$i} * 0.08s)
+            // Natural vertical stagger
+            $offset: math.random(30) - 15
             margin-top: #{$offset}px
+            // Consistent animation timing for stable colors
+            animation-duration: 0.8s, 8s
     
     .postheader
         width: 100%
@@ -230,53 +272,90 @@ $base: var(--base-color)
         z-index: 1
         a
             text-decoration: none
-            font-size: clamp(10px,2.5vw,11px)
-            color: lch(from $text calc(l - 30) c h)
-            letter-spacing: 0.5px
+            font-size: clamp(11px,2.5vw,12px)
+            color: lch(from $text calc(l - 25) c h)
+            letter-spacing: 0.8px
+            text-transform: lowercase
+            font-weight: 300
+            transition: all 0.3s ease
+            &:hover
+                color: $accent
+                letter-spacing: 1.2px
         svg
             stroke: lch(from $text calc(l - 30) c h)
-            width: 16px
-            height: 16px
+            width: 18px
+            height: 18px
             cursor: pointer
             opacity: 0
-            transition: opacity 0.2s ease
+            transition: opacity 0.3s ease, transform 0.3s ease
+            &:hover
+                transform: scale(1.15) rotate(5deg)
+    
     p
         font-family: $logo
-        color: lch(from $text calc(l - 2) c h)
-        font-size: clamp(14px,3vw,16px)
-        line-height: 1.8
-        letter-spacing: 0.3px
+        color: lch(from $text calc(l + 2) c h)
+        font-size: clamp(16px,3.5vw,20px)
+        line-height: 2
+        letter-spacing: 0.5px
         white-space: pre-wrap
         z-index: 1
+        font-weight: 300
+    
     .cta
-        @include flex($j: space-between, $a: center, $d: row, $g: 14px)
-        margin-top: 10px
+        @include flex($j: space-between, $a: center, $d: row, $g: 16px)
+        margin-top: 16px
         cursor: pointer
         z-index: 1
         .btn
-            @include flex($j: center, $d: row, $g: 8px)
-            padding: 6px 12px
-            border-radius: 20px
-            transition: all 0.3s ease
+            @include flex($j: center, $d: row, $g: 10px)
+            padding: 8px 16px
+            border-radius: 100px
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
             position: relative
+            background: transparent
+            
+            // Radial glow effect on hover
+            &::before
+                content: ''
+                position: absolute
+                top: 50%
+                left: 50%
+                transform: translate(-50%, -50%)
+                width: 0
+                height: 0
+                border-radius: 100%
+                background: radial-gradient(circle, lch(from $accent calc(l + 10) c h 0.4) 0%, transparent 70%)
+                transition: all 0.6s ease
+                z-index: -1
+                pointer-events: none
+            
             svg
-                stroke: lch(from $text calc(l - 30) c h)
-                width: 18px
-                height: 18px
-                transition: all 0.3s ease
+                stroke: lch(from $text calc(l - 25) c h)
+                width: 20px
+                height: 20px
+                transition: all 0.4s ease
+                filter: drop-shadow(0 0 0 transparent)
             span
-                color: lch(from $text calc(l - 30) c h)
-                font-size: 12px
-                transition: all 0.3s ease
+                color: lch(from $text calc(l - 25) c h)
+                font-size: 13px
+                transition: all 0.4s ease
+                font-weight: 400
             .paw_label
                 &::before
                     content: "🐾 "
                     margin-right: 2px
             &:hover
-                background-color: lch(from $base calc(l + 10) c h)
+                background-color: lch(from $base calc(l + 6) c h 0.5)
+                transform: translateY(-2px)
+                
+                &::before
+                    width: 120px
+                    height: 120px
+                
                 svg
                     stroke: $text
                     animation: pawpulse 0.6s ease
+                    filter: drop-shadow(0 0 8px lch(from $accent calc(l + 10) c h 0.6))
                 span
                     color: $text
             &:active
@@ -285,20 +364,32 @@ $base: var(--base-color)
                 &::after
                     content: '🐾'
                     position: absolute
-                    font-size: 20px
+                    font-size: 24px
                     animation: pawGlow 1.2s ease-out forwards
+                    z-index: 10
         .btn_active
-            background-color: lch(from $base calc(l + 10) c h)
+            background-color: lch(from $accent calc(l - 10) c h 0.3)
+            
+            &::before
+                width: 100px
+                height: 100px
+            
             svg
                 stroke: $accent
                 fill: $accent
+                filter: drop-shadow(0 0 6px lch(from $accent calc(l + 10) c h 0.5))
             span
                 color: $accent
                 font-weight: 600
+    
     &:hover
-        transform: translateY(-2px) rotate(0.5deg)
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2)
-        border-radius: 20px 8px 20px 8px
+        transform: translateY(-6px) rotate(0.5deg) scale(1.02)
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px lch(from $accent calc(l) c h 0.15) inset
+        border-color: lch(from $accent calc(l + 5) c h 0.4)
+        background: linear-gradient(135deg, lch(from $base calc(l + 5) c h 270 / 0.8), lch(from $base calc(l + 3) c h 280 / 0.6))
+        backdrop-filter: blur(30px) saturate(220%)
+        animation-play-state: paused
+        
         .postheader
             svg
                 opacity: 1
@@ -306,67 +397,96 @@ $base: var(--base-color)
 @keyframes fadeInUp
     0%
         opacity: 0
-        transform: translateY(30px)
+        transform: translateY(40px)
     100%
         opacity: 1
         transform: translateY(0)
+
+@keyframes gentleSway
+    0%, 100%
+        transform: rotate(-0.3deg) translateY(0)
+    33%
+        transform: rotate(0.4deg) translateY(-3px)
+    66%
+        transform: rotate(-0.2deg) translateY(-6px)
+
+@keyframes mistShift
+    0%, 100%
+        transform: translate(0, 0) scale(1)
+        opacity: 1
+    50%
+        transform: translate(5%, 3%) scale(1.05)
+        opacity: 0.8
+
+@keyframes gentleGlow
+    0%
+        opacity: 0.3
+        transform: translate(-50%, -50%) scale(1)
+    100%
+        opacity: 0.5
+        transform: translate(-50%, -50%) scale(1.1)
 
 @keyframes pawpulse
     0%, 100%
         transform: scale(1)
     50%
-        transform: scale(1.3)
+        transform: scale(1.35)
 
 @keyframes soundwave
     0%
-        box-shadow: 0 0 0 0 lch(from $accent calc(l + 10) c h 0.6)
+        box-shadow: 0 0 0 0 lch(from $accent calc(l + 10) c h 0.7)
     50%
-        box-shadow: 0 0 0 10px lch(from $accent calc(l + 10) c h 0)
+        box-shadow: 0 0 0 15px lch(from $accent calc(l + 10) c h 0)
     100%
         box-shadow: 0 0 0 0 lch(from $accent calc(l + 10) c h 0)
 
 @keyframes pawGlow
     0%
-        opacity: 0.8
+        opacity: 0.9
         transform: translate(-50%, -50%) scale(1)
     100%
         opacity: 0
-        transform: translate(-50%, -50%) scale(2.5)
-        filter: blur(8px)
+        transform: translate(-50%, -50%) scale(3)
+        filter: blur(12px)
 
 // Panda Loader Animations
 @keyframes pandaBreathe
     0%, 100%
         transform: scale(1)
-        opacity: 0.9
+        opacity: 0.85
+        filter: drop-shadow(0 0 0 transparent)
     50%
-        transform: scale(1.08)
+        transform: scale(1.12)
         opacity: 1
+        filter: drop-shadow(0 0 20px lch(from $accent calc(l + 10) c h 0.4))
 
 @keyframes fadeInOut
     0%, 100%
-        opacity: 0.5
+        opacity: 0.4
     50%
-        opacity: 0.9
+        opacity: 1
 
 .panda_loader_container
     display: flex
     flex-direction: column
     align-items: center
-    gap: 20px
+    gap: 24px
     padding: 40px
+    position: relative
+    z-index: 10
 
 .panda_svg
-    animation: pandaBreathe 3s ease-in-out infinite
+    animation: pandaBreathe 3.5s ease-in-out infinite
 
 .panda_loader_message
     color: $text
     opacity: 0.7
-    font-size: 14px
+    font-size: 15px
     font-family: $logo
     text-align: center
-    animation: fadeInOut 3s ease-in-out infinite
+    animation: fadeInOut 3.5s ease-in-out infinite
     margin: 0
+    letter-spacing: 1px
 
 .masonry
     column-count: 5
@@ -662,11 +782,34 @@ $base: var(--base-color)
 
 .splash
     height: 100svh
+    width: 100vw
     @include flex()
+    background: linear-gradient(135deg, $base 0%, lch(from $base calc(l + 6) c h) 100%)
+    position: relative
+    overflow: hidden
+    
+    // Atmospheric glow
+    &::before
+        content: ''
+        position: absolute
+        width: 400px
+        height: 400px
+        background: radial-gradient(circle, lch(from $accent calc(l + 10) c h 0.3) 0%, transparent 70%)
+        animation: splashGlow 4s ease-in-out infinite alternate
+        pointer-events: none
+    
     .logo
         font-family: $logo
         font-size: 48px
         color: $text
+
+@keyframes splashGlow
+    0%
+        transform: scale(1) translate(-50%, -50%)
+        opacity: 0.3
+    100%
+        transform: scale(1.4) translate(-50%, -50%)
+        opacity: 0.6
 
 .crash
     height: 100svh
