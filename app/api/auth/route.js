@@ -37,7 +37,7 @@ export async function POST(req) {
                 },
             });
             await transporter.sendMail({
-                from: '"Nice Panda" <nicepanda.no-reply@vebedge.com>',
+                from: '"Nice Panda" <no-reply@vebedge.com>',
                 to: email,
                 subject: `Sign in to Your Account - ${new Date().toLocaleString()}`,
                 html: `
