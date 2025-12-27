@@ -9,7 +9,7 @@ const AboutPage = () => {
     <div className={css.about}>
       {/* Header */}
       <header className={css.about_header}>
-        <Link href="/landing" className={css.back_btn}>
+        <Link href="/" className={css.back_btn}>
           <ArrowLeft size={20} />
           Back
         </Link>

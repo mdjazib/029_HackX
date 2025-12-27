@@ -31,9 +31,21 @@ $base: var(--base-color)
         background-color: $text
 
 .app
-    background-color: lch(from $base calc(l + 6) c h)
+    background: linear-gradient(180deg, lch(from $base calc(l + 2) c h), lch(from $base calc(l + 6) c h), lch(from $base calc(l + 3) c h))
     height: 100svh
     width: 100vw
+    position: relative
+    
+    // Subtle misty overlay
+    &::before
+        content: ''
+        position: absolute
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+        background: radial-gradient(ellipse at top, lch(from $base calc(l + 8) c h 0.3) 0%, transparent 60%)
+        pointer-events: none
     .col
         @include flex($j:flex-start)
         .header,main
@@ -46,33 +58,45 @@ $base: var(--base-color)
             &::-webkit-scrollbar
                 display: none
             .forest_header
-                margin-bottom: 20px
+                margin-bottom: 40px
+                padding: 20px 0
                 h2
                     font-family: $logo
-                    font-size: clamp(24px, 5vw, 32px)
+                    font-size: clamp(32px, 6vw, 48px)
                     color: $text
-                    margin: 0 0 6px 0
+                    margin: 0 0 12px 0
+                    letter-spacing: 1px
                 p
-                    color: lch(from $text calc(l - 20) c h)
-                    font-size: 14px
+                    font-family: $logo
+                    color: lch(from $text calc(l - 25) c h)
+                    font-size: clamp(14px, 3vw, 16px)
                     margin: 0
+                    line-height: 1.6
+                    font-style: italic
             .empty_state
                 width: 100%
-                padding: 60px 20px
+                padding: 80px 20px
                 text-align: center
-                @include flex($g: 10px)
+                @include flex($g: 16px)
                 p
-                    color: lch(from $text calc(l - 20) c h)
-                    font-size: 16px
+                    font-family: $logo
+                    color: lch(from $text calc(l - 15) c h)
+                    font-size: clamp(18px, 4vw, 22px)
                     margin: 0
+                    line-height: 1.8
+                    font-style: italic
                 small
-                    color: lch(from $text calc(l - 40) c h)
-                    font-size: 13px
+                    color: lch(from $text calc(l - 35) c h)
+                    font-size: 14px
+                    letter-spacing: 0.5px
         .header
             height: 8svh
             position: sticky
             top: 0
             z-index: 10
+            backdrop-filter: blur(20px)
+            background: linear-gradient(180deg, lch(from $base calc(l + 3) c h 0.95), lch(from $base calc(l + 1) c h 0.9))
+            border-bottom: 1px solid lch(from $base calc(l + 8) c h 0.3)
             @include flex($j:space-between,$a:center,$d:row, $g: 10px)
             padding: 0px 14px
             .logo
@@ -81,6 +105,11 @@ $base: var(--base-color)
                 font-size: 22px
                 white-space: nowrap
                 color: $text
+                transition: all 0.3s ease
+                text-shadow: 0 0 20px lch(from $text calc(l - 10) c h 0.3)
+                &:hover
+                    text-shadow: 0 0 30px lch(from $accent calc(l + 10) c h 0.6), 0 0 40px lch(from $accent calc(l + 5) c h 0.4)
+                    letter-spacing: 1px
             .search
                 width: 100%
                 background-color: lch(from $base calc(l + 4) c h)
@@ -106,15 +135,19 @@ $base: var(--base-color)
                     stroke: lch(from $text calc(l - 40) c h)
             .cta
                 @include flex($j: flex-end,$a:center,$d: row, $g: 10px)
-                .createpostbtn
-                    transition: .1s ease
+                .createpostbtn,
+                .bamboo_icon
+                    transition: .2s ease
                     cursor: pointer
                     width: 30px
                     height: 30px
                     border-radius: 100px
                     @include flex()
+                    background: transparent
+                    border: none
+                    padding: 0
                     svg
-                        transition: .1s ease
+                        transition: .2s ease
                         width: 16px
                         height: 16px
                         stroke: lch(from $text calc(l - 20) c h)
@@ -122,6 +155,15 @@ $base: var(--base-color)
                         background-color: lch(from $base calc(l + 6) c h)
                         svg
                             stroke: $text
+                .bamboo_icon
+                    svg
+                        color: lch(from $text calc(l - 20) c h)
+                        width: 20px
+                        height: 20px
+                    &:hover
+                        svg
+                            color: $accent
+                            transform: scale(1.1)
             .header_nav
                 @include flex($j:center, $a:center, $d:row, $g: 16px)
                 .nav_link
@@ -132,83 +174,204 @@ $base: var(--base-color)
                     &:hover
                         color: $text
 .avatar
-    background-color: lch(from $base calc(l + 6) c h)
+    background-color: transparent
     width: 30px
     height: 30px
     border-radius: 100px
-    overflow: hidden
+    overflow: visible
+    transition: all 0.3s ease
+    @include flex()
     img
         width: 100%
         height: 100%
         object-fit: cover
-    .dummy_svg
-        width: 100%
-        height: 100%
-        @include flex($g: 2px)
-        transition: .1s ease
-        .avatar_head_svg,
-        .avatar_body_svg
-            transition: .1s ease
-            background-color: lch(from $base calc(l + 24) c h)
-            height: 8px
-        .avatar_head_svg
-            border-radius: 100px
-            width: 8px
-        .avatar_body_svg
-            border-radius: 7px 7px 100% 100%
-            width: 14px
-        &:hover
-            background-color: lch(from $base calc(l + 12) c h)
-            .avatar_head_svg,
-            .avatar_body_svg
-                background-color: lch(from $base calc(l + 34) c h)
+    svg
+        transition: all 0.3s ease
+    &:hover
+        transform: scale(1.1)
+        svg
+            filter: drop-shadow(0 0 8px lch(from $accent calc(l + 10) c h 0.6))
 
 .thought
-    background-color: lch(from $base calc(l + 4) c h)
-    padding: 14px
-    border-radius: 6px
-    @include flex($j:flex-start,$g: 10px)
+    background: linear-gradient(135deg, lch(from $base calc(l + 6) c h), lch(from $base calc(l + 4) c h))
+    padding: 24px
+    border-radius: 18px 6px 18px 6px
+    backdrop-filter: blur(10px)
+    border: none
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15)
+    transition: all 0.3s ease
+    @include flex($j:flex-start,$g: 16px)
+    animation: fadeInUp 0.6s ease-out backwards
+    position: relative
+    
+    // Organic texture overlay (wood pulp/paper)
+    &::before
+        content: ''
+        position: absolute
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+        border-radius: 18px 6px 18px 6px
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E")
+        pointer-events: none
+        opacity: 0.5
+    
+    @for $i from 1 through 20
+        &:nth-child(#{$i})
+            animation-delay: calc(#{$i} * 0.05s)
+            // Random vertical offset for natural stagger
+            $offset: random(20) - 10
+            margin-top: #{$offset}px
+    
     .postheader
         width: 100%
         @include flex($j: space-between, $a: center, $d: row, $g:10px )
+        z-index: 1
         a
             text-decoration: none
-            font-size: clamp(10px,2.5vw,12px)
-            color: lch(from $text calc(l - 20) c h)
+            font-size: clamp(10px,2.5vw,11px)
+            color: lch(from $text calc(l - 30) c h)
+            letter-spacing: 0.5px
         svg
-            stroke: lch(from $text calc(l - 20) c h)
+            stroke: lch(from $text calc(l - 30) c h)
             width: 16px
             height: 16px
             cursor: pointer
             opacity: 0
+            transition: opacity 0.2s ease
     p
-        color: lch(from $text calc(l - 5) c h)
-        font-size: clamp(11px,2.5vw,13px)
+        font-family: $logo
+        color: lch(from $text calc(l - 2) c h)
+        font-size: clamp(14px,3vw,16px)
+        line-height: 1.8
+        letter-spacing: 0.3px
+        white-space: pre-wrap
+        z-index: 1
     .cta
         @include flex($j: space-between, $a: center, $d: row, $g: 14px)
-        margin-top: 6px
+        margin-top: 10px
         cursor: pointer
+        z-index: 1
         .btn
-            @include flex($j: center, $d: row, $g: 6px)
+            @include flex($j: center, $d: row, $g: 8px)
+            padding: 6px 12px
+            border-radius: 20px
+            transition: all 0.3s ease
+            position: relative
             svg
-                stroke: lch(from $text calc(l - 20) c h)
-                width: 16px
-                height: 16px
+                stroke: lch(from $text calc(l - 30) c h)
+                width: 18px
+                height: 18px
+                transition: all 0.3s ease
             span
-                color: lch(from $text calc(l - 20) c h)
+                color: lch(from $text calc(l - 30) c h)
                 font-size: 12px
+                transition: all 0.3s ease
             .paw_label
                 &::before
                     content: "🐾 "
                     margin-right: 2px
+            &:hover
+                background-color: lch(from $base calc(l + 10) c h)
+                svg
+                    stroke: $text
+                    animation: pawpulse 0.6s ease
+                span
+                    color: $text
+            &:active
+                svg
+                    animation: pawpulse 0.6s ease, soundwave 0.8s ease
+                &::after
+                    content: '🐾'
+                    position: absolute
+                    font-size: 20px
+                    animation: pawGlow 1.2s ease-out forwards
+        .btn_active
+            background-color: lch(from $base calc(l + 10) c h)
+            svg
+                stroke: $accent
+                fill: $accent
+            span
+                color: $accent
+                font-weight: 600
     &:hover
+        transform: translateY(-2px) rotate(0.5deg)
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2)
+        border-radius: 20px 8px 20px 8px
         .postheader
             svg
                 opacity: 1
+
+@keyframes fadeInUp
+    0%
+        opacity: 0
+        transform: translateY(30px)
+    100%
+        opacity: 1
+        transform: translateY(0)
+
+@keyframes pawpulse
+    0%, 100%
+        transform: scale(1)
+    50%
+        transform: scale(1.3)
+
+@keyframes soundwave
+    0%
+        box-shadow: 0 0 0 0 lch(from $accent calc(l + 10) c h 0.6)
+    50%
+        box-shadow: 0 0 0 10px lch(from $accent calc(l + 10) c h 0)
+    100%
+        box-shadow: 0 0 0 0 lch(from $accent calc(l + 10) c h 0)
+
+@keyframes pawGlow
+    0%
+        opacity: 0.8
+        transform: translate(-50%, -50%) scale(1)
+    100%
+        opacity: 0
+        transform: translate(-50%, -50%) scale(2.5)
+        filter: blur(8px)
+
+// Panda Loader Animations
+@keyframes pandaBreathe
+    0%, 100%
+        transform: scale(1)
+        opacity: 0.9
+    50%
+        transform: scale(1.08)
+        opacity: 1
+
+@keyframes fadeInOut
+    0%, 100%
+        opacity: 0.5
+    50%
+        opacity: 0.9
+
+.panda_loader_container
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: 20px
+    padding: 40px
+
+.panda_svg
+    animation: pandaBreathe 3s ease-in-out infinite
+
+.panda_loader_message
+    color: $text
+    opacity: 0.7
+    font-size: 14px
+    font-family: $logo
+    text-align: center
+    animation: fadeInOut 3s ease-in-out infinite
+    margin: 0
+
 .masonry
     column-count: 5
     height: fit-content
-    column-gap: 14px
+    column-gap: 32px
     @media (max-width: 1200px)
         columns: 4
     @media (max-width: 1000px)
@@ -217,7 +380,150 @@ $base: var(--base-color)
         columns: 2
     .thought
         break-inside: avoid
-        margin-bottom: 14px
+        margin-bottom: 32px
+
+.floating_cta
+    position: fixed
+    bottom: 40px
+    right: 40px
+    z-index: 100
+    animation: floatIn 0.8s ease-out, gentleFloat 3s ease-in-out infinite
+    @media (max-width: 760px)
+        bottom: 20px
+        right: 20px
+    .cta_button
+        background: linear-gradient(135deg, lch(from $accent calc(l + 5) c h), $accent)
+        color: lch(from $base calc(l + 2) c h)
+        padding: 16px 28px
+        border-radius: 50px
+        text-decoration: none
+        font-family: $logo
+        font-size: 16px
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 0 60px lch(from $accent calc(l + 10) c h 0.4)
+        @include flex($j: center, $a: center, $d: row, $g: 10px)
+        transition: all 0.3s ease
+        cursor: pointer
+        backdrop-filter: blur(10px)
+        border: 1px solid lch(from $accent calc(l + 15) c h)
+        svg
+            width: 20px
+            height: 20px
+            stroke: currentColor
+        &:hover
+            transform: scale(1.05) translateY(-2px)
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 80px lch(from $accent calc(l + 10) c h 0.6)
+        &:active
+            transform: scale(0.98)
+        @media (max-width: 760px)
+            padding: 14px 24px
+            font-size: 14px
+
+// Quiet Clearing - Focus Mode Overlay
+.focus_overlay
+    position: fixed
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    background: lch(from $base calc(l - 5) c h 0.95)
+    backdrop-filter: blur(30px)
+    z-index: 999
+    animation: focusFadeIn 0.6s ease-out
+    @include flex()
+    
+.focus_container
+    background: linear-gradient(135deg, lch(from $base calc(l + 8) c h), lch(from $base calc(l + 6) c h))
+    padding: 40px
+    border-radius: 20px 8px 20px 8px
+    max-width: 700px
+    width: 90%
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4)
+    animation: focusSlideUp 0.6s ease-out
+    @include flex($j: flex-start, $g: 20px)
+    
+    .focus_header
+        font-family: $logo
+        font-size: clamp(24px, 5vw, 32px)
+        color: $text
+        text-align: center
+        margin: 0
+    
+    .focus_textarea
+        font-family: $logo
+        font-size: 16px
+        line-height: 1.8
+        color: $text
+        background: lch(from $base calc(l + 2) c h)
+        border: 1px solid lch(from $base calc(l + 10) c h)
+        border-radius: 12px
+        padding: 20px
+        min-height: 200px
+        width: 100%
+        resize: vertical
+        outline: none
+        &::placeholder
+            color: lch(from $text calc(l - 30) c h)
+            font-style: italic
+        &:focus
+            border-color: $accent
+            box-shadow: 0 0 20px lch(from $accent calc(l + 10) c h 0.3)
+    
+    .focus_actions
+        @include flex($j: space-between, $a: center, $d: row, $g: 12px)
+        width: 100%
+        
+        button
+            padding: 12px 28px
+            border-radius: 100px
+            font-size: 14px
+            font-weight: 500
+            cursor: pointer
+            transition: all 0.3s ease
+            border: none
+            font-family: $logo
+            
+        .focus_cancel
+            background: transparent
+            color: lch(from $text calc(l - 20) c h)
+            border: 1px solid lch(from $base calc(l + 10) c h)
+            &:hover
+                background: lch(from $base calc(l + 2) c h)
+                color: $text
+                
+        .focus_submit
+            background: linear-gradient(135deg, lch(from $accent calc(l + 5) c h), $accent)
+            color: lch(from $base calc(l + 2) c h)
+            &:hover
+                transform: scale(1.05)
+                box-shadow: 0 4px 20px lch(from $accent calc(l + 10) c h 0.4)
+
+@keyframes focusFadeIn
+    from
+        opacity: 0
+    to
+        opacity: 1
+
+@keyframes focusSlideUp
+    from
+        opacity: 0
+        transform: translateY(50px)
+    to
+        opacity: 1
+        transform: translateY(0)
+
+@keyframes floatIn
+    0%
+        opacity: 0
+        transform: translateY(100px) scale(0.8)
+    100%
+        opacity: 1
+        transform: translateY(0) scale(1)
+
+@keyframes gentleFloat
+    0%, 100%
+        transform: translateY(0px)
+    50%
+        transform: translateY(-10px)
 
 .authentication
     height: 100svh

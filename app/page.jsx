@@ -3,9 +3,13 @@ import Header from '@/components/Header'
 import css from "./app.module.sass"
 import React, { useState, useMemo } from 'react'
 import Thought from '@/components/Thought'
+import { Sprout } from 'lucide-react'
+import Link from 'next/link'
 
 const page = () => {
     const [filterText, setFilterText] = useState("");
+    const [showFocusMode, setShowFocusMode] = useState(false);
+    const [newThought, setNewThought] = useState("");
 
     const thoughts = [
         {
@@ -241,24 +245,61 @@ const page = () => {
     return (
         <div className={css.app}>
             <div className={css.col}>
-                <Header css={css} onSearch={setFilterText} />
+                <Header css={css} onSearch={setFilterText} onNewThought={() => setShowFocusMode(true)} />
                 <main>
                     <div className={css.forest_header}>
-                        <h2>The Forest 🌲</h2>
-                        <p>Honest thoughts from honest minds.</p>
+                        <h2>The Forest</h2>
+                        <p>Where honest thoughts find their roots, and quiet minds speak the loudest.</p>
                     </div>
                     <div className={css.masonry}>
                         {filteredThoughts.length > 0 ? (
                             filteredThoughts.map((thought, index) => (<Thought key={index} data={thought} css={css} />))
                         ) : (
                             <div className={css.empty_state}>
-                                <p>No thoughts found.</p>
-                                <small>Try a different search or browse the forest again.</small>
+                                <p>The Forest is quiet today.<br/>Be the first to plant a thought.</p>
+                                <small>— Every bamboo starts with a single seed —</small>
                             </div>
                         )}
                     </div>
                 </main>
             </div>
+            
+            {/* Floating CTA for unauthenticated users */}
+            <div className={css.floating_cta}>
+                <Link href="/auth" className={css.cta_button}>
+                    <Sprout />
+                    <span>Plant Your First Thought</span>
+                </Link>
+            </div>
+
+            {/* Focus Mode Overlay */}
+            {showFocusMode && (
+                <div className={css.focus_overlay} onClick={() => setShowFocusMode(false)}>
+                    <div className={css.focus_container} onClick={(e) => e.stopPropagation()}>
+                        <h2 className={css.focus_header}>Plant Your Thought</h2>
+                        <textarea 
+                            className={css.focus_textarea}
+                            placeholder="Share what's unspoken..."
+                            value={newThought}
+                            onChange={(e) => setNewThought(e.target.value)}
+                            autoFocus
+                        />
+                        <div className={css.focus_actions}>
+                            <button className={css.focus_cancel} onClick={() => setShowFocusMode(false)}>
+                                Cancel
+                            </button>
+                            <button className={css.focus_submit} onClick={() => {
+                                // TODO: Submit thought
+                                alert('Thought planted! (Coming soon)');
+                                setNewThought('');
+                                setShowFocusMode(false);
+                            }}>
+                                Plant Thought
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

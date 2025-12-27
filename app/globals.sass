@@ -4,6 +4,10 @@
     box-sizing: border-box
     font-family: var(--font-inter)
 
+html
+    scroll-behavior: smooth
+
 body
-    background-color: var(--base-color)
+    background: linear-gradient(180deg, lch(from var(--base-color) calc(l + 2) c h), var(--base-color))
     height: 100svh
+    overflow: hidden

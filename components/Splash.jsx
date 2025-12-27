@@ -1,10 +1,11 @@
 import React from 'react'
 import css from "../app/app.module.sass";
+import PandaLoader from './PandaLoader';
 
 const Splash = () => {
     return (
         <div className={css.splash}>
-            <div className={css.logo}>N</div>
+            <PandaLoader message="Entering the forest..." />
         </div>
     )
 }
