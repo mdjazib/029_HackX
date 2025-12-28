@@ -1,14 +1,16 @@
 "use client"
-import { Maximize2, PawPrint, Share } from 'lucide-react'
+import { PawPrint, Reply, Share } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import React from 'react'
 
 const Thought = ({ key, data, css }) => {
+    const router = useRouter();
     return (
         <div key={key} className={css.thought}>
             <div className={css.postheader}>
-                <Link href={"#"}>{data.username}</Link>
-                <Maximize2 />
+                <Link href={`/${data.username}`}>{data.username}</Link>
+                <Reply />
             </div>
             <p>{data.thought}</p>
             <div className={css.cta}>

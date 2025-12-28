@@ -173,9 +173,9 @@ $base: var(--base-color)
     @media (max-width: 1200px)
         columns: 4
     @media (max-width: 1000px)
-        columns: 3
+        columns: 3 !important
     @media (max-width: 760px)
-        columns: 2
+        columns: 2 !important
     .thought
         break-inside: avoid
         margin-bottom: 14px
@@ -354,6 +354,7 @@ $base: var(--base-color)
     @include flex($j: center)
     width: 100%
     height: 100%
+    z-index: 9999
     background-color: lch(from $base l c h / 98%)
     .create_post
         max-width: 500px
@@ -416,3 +417,61 @@ $base: var(--base-color)
             width: 100%
             .loader
                 @include loading($s: 70)
+
+.username
+    @include flex($j: center, $a: flex-start, $d: row, $g: 0px)
+    .centered
+        width: 100%
+        max-width: 900px
+        @include flex($j: flex-start,$g: 40px)
+        @media (max-width:550px)
+            gap: 35px
+        .profile
+            width: 100%
+            padding-top: 20px
+            @include flex($j: center,$a:flex-start, $d: row, $g: 20px)
+            .avatar_wrap
+                background-color: lch(from $base calc(l + 6) c h)
+                border-radius: 100%
+                overflow: hidden
+                width: 100px
+                height: 100px
+                .dummy_svg
+                    scale: 2
+                @media (max-width:550px)
+                    width: 60px
+                    height: 60px
+                    min-width: 60px
+                    .dummy_svg
+                        scale: 1
+            .details
+                color: $text
+                width: 100%
+                max-width: 400px
+                @include flex($j: flex-start,$g: 10px)
+                p
+                    color: lch(from $text calc(l - 20) c h)
+                    @include flex($j: space-between, $a: center, $d: row, $g: 10px)
+                    font-size: clamp( 11px,3vw, 14px )
+                    width: 100%
+                    span
+                        @include flex($j: flex-end, $a: center, $d: row, $g: 10px)
+                        svg
+                            stroke: lch(from $text calc(l - 30) c h)
+                            cursor: pointer
+                            width: 14px
+                            height: 14px
+                    &:nth-child(1)
+                        margin-top: 12px
+                        @media (max-width:550px)
+                            margin-top: 0px
+                h1
+                    font-size: clamp(16px,3vw,20px)
+                    font-weight: 500
+                h3
+                    font-weight: 400
+                    color: lch(from $text calc(l - 20) c h)
+                    font-size: 14px
+                    margin-top: 10px
+        .masonry
+            column-count: 3
