@@ -1,258 +1,189 @@
 "use client"
 import Header from '@/components/Header'
 import css from "./app.module.sass"
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import Thought from '@/components/Thought'
-import { Sprout } from 'lucide-react'
-import Link from 'next/link'
+
+const SAMPLE_THOUGHTS = [
+    {
+        _id: '507f1f77bcf86cd799439011',
+        content: 'Just finished a long day of coding. Sometimes the best solutions come when you take a break and come back with fresh eyes.',
+        authorUsername: 'bamboo_coder',
+        pawprints: 24,
+        saves: 8,
+        replies: 3,
+        createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+    },
+    {
+        _id: '507f1f77bcf86cd799439012',
+        content: 'The forest teaches us patience. Not everything needs to grow at the same pace. 🌿',
+        authorUsername: 'zen_panda',
+        pawprints: 45,
+        saves: 12,
+        replies: 7,
+        createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString()
+    },
+    {
+        _id: '507f1f77bcf86cd799439013',
+        content: 'Coffee is 90% of my debugging strategy. The other 10% is actually understanding the code.',
+        authorUsername: 'debug_life',
+        pawprints: 156,
+        saves: 34,
+        replies: 21,
+        createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString()
+    },
+    {
+        _id: '507f1f77bcf86cd799439014',
+        content: 'Sometimes I think about how pandas just sit around eating bamboo and I realize that\'s the ultimate life goal.',
+        authorUsername: 'lazy_dev',
+        pawprints: 89,
+        saves: 23,
+        replies: 12,
+        createdAt: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString()
+    },
+    {
+        _id: '507f1f77bcf86cd799439015',
+        content: 'Trying to understand why my code works. If I don\'t understand it, neither will the next person.',
+        authorUsername: 'code_explorer',
+        pawprints: 67,
+        saves: 18,
+        replies: 9,
+        createdAt: new Date(Date.now() - 10 * 60 * 60 * 1000).toISOString()
+    },
+    {
+        _id: '507f1f77bcf86cd799439016',
+        content: 'Just realized that my first programming language was actually HTML. We all start somewhere! 💪',
+        authorUsername: 'web_wanderer',
+        pawprints: 102,
+        saves: 31,
+        replies: 14,
+        createdAt: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString()
+    },
+    {
+        _id: '507f1f77bcf86cd799439017',
+        content: 'There\'s something magical about the moment when your code compiles without errors for the first time.',
+        authorUsername: 'dev_dreams',
+        pawprints: 234,
+        saves: 56,
+        replies: 29,
+        createdAt: new Date(Date.now() - 14 * 60 * 60 * 1000).toISOString()
+    },
+    {
+        _id: '507f1f77bcf86cd799439018',
+        content: 'The best part about open source? Realizing someone out there had the same problem you\'re facing now.',
+        authorUsername: 'community_hub',
+        pawprints: 78,
+        saves: 22,
+        replies: 11,
+        createdAt: new Date(Date.now() - 16 * 60 * 60 * 1000).toISOString()
+    },
+    {
+        _id: '507f1f77bcf86cd799439019',
+        content: 'CSS is not a programming language, but it\'s definitely a love-hate relationship.',
+        authorUsername: 'style_ninja',
+        pawprints: 145,
+        saves: 38,
+        replies: 18,
+        createdAt: new Date(Date.now() - 18 * 60 * 60 * 1000).toISOString()
+    },
+    {
+        _id: '507f1f77bcf86cd79943901a',
+        content: 'Found a bug I wrote 6 months ago. Pretty sure that was future me trying to teach current me a lesson.',
+        authorUsername: 'past_me',
+        pawprints: 198,
+        saves: 47,
+        replies: 24,
+        createdAt: new Date(Date.now() - 20 * 60 * 60 * 1000).toISOString()
+    },
+    {
+        _id: '507f1f77bcf86cd79943901b',
+        content: 'Nothing beats the feeling of productivity on a Monday morning. Except for the feeling of Friday afternoon.',
+        authorUsername: 'week_cycle',
+        pawprints: 87,
+        saves: 26,
+        replies: 13,
+        createdAt: new Date(Date.now() - 22 * 60 * 60 * 1000).toISOString()
+    },
+    {
+        _id: '507f1f77bcf86cd79943901c',
+        content: 'Refactoring code is like organizing your room. You think it only takes 30 minutes, but suddenly it\'s 3 hours.',
+        authorUsername: 'time_warp',
+        pawprints: 156,
+        saves: 42,
+        replies: 19,
+        createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+    }
+];
 
 const page = () => {
     const [filterText, setFilterText] = useState("");
     const [showFocusMode, setShowFocusMode] = useState(false);
     const [newThought, setNewThought] = useState("");
 
-    const thoughts = [
-        {
-            username: "itxmuhammadjazib",
-            thought: "Learn to give before you take.",
-            paws: 2410,
-            shares: 20
-        },
-        {
-            username: "azlan.codes",
-            thought: "Silence is the most honest reply.",
-            paws: 1533,
-            shares: 11
-        },
-        {
-            username: "wolfmind",
-            thought: "Heal in private, grow in public.",
-            paws: 1984,
-            shares: 16
-        },
-        {
-            username: "inkedthoughts",
-            thought: "Weak ties break fast. Strong hearts don’t.",
-            paws: 1204,
-            shares: 9
-        },
-        {
-            username: "exist.with.purpose",
-            thought: "Not everyone deserves a seat in your life.",
-            paws: 2211,
-            shares: 14
-        },
-        {
-            username: "mindshift",
-            thought: "Respect is expensive. Earn it.",
-            paws: 1442,
-            shares: 12
-        },
-        {
-            username: "soul.storm",
-            thought: "Your growth will offend small minds.",
-            paws: 2090,
-            shares: 18
-        },
-        {
-            username: "itxmuhammadjazib",
-            thought: "Be kind. It confuses the unkind.",
-            paws: 1730,
-            shares: 15
-        },
-        {
-            username: "seeker",
-            thought: "Walk alone until the right people catch up.",
-            paws: 2677,
-            shares: 22
-        },
-        {
-            username: "silentwolf",
-            thought: "Peace looks good on you.",
-            paws: 1330,
-            shares: 8
-        },
+    const [thoughts, setThoughts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-        // ---------- LONG THOUGHTS ----------
-        {
-            username: "itxmuhammadjazib",
-            thought: `Sometimes life doesn’t break you to destroy you.  
-    It breaks you to rebuild parts of you that were never allowed to grow.  
-    You lose people so you can find yourself.  
-    You fall so you can rise differently.  
-    You get hurt so you can learn boundaries.  
-    You get ignored so you can stop seeking validation.  
-    You walk alone so you can hear your own voice.  
-    Growth is loud inside you, even if the world stays silent.`,
-            paws: 4821,
-            shares: 41
-        },
-        {
-            username: "mind.core",
-            thought: `The truth is, you outgrow people faster than you expect.  
-    You outgrow places, habits, and versions of yourself you once loved.  
-    That’s not betrayal.  
-    That’s evolution.  
-    You are not meant to stay where you were hurt.  
-    You are not meant to shrink to fit.  
-    Rise so high that your past cannot reach you anymore.`,
-            paws: 4211,
-            shares: 39
-        },
-        {
-            username: "depthscript",
-            thought: `Be careful whose opinions you internalize.  
-    Some judge you from their wounds, not your reality.  
-    Some attack because your confidence exposes their insecurity.  
-    Some distance themselves because your growth threatens their comfort.  
-    Don’t shrink.  
-    Don’t bend.  
-    Move forward with the strength they never expected.`,
-            paws: 3790,
-            shares: 31
-        },
-        {
-            username: "soulwriter",
-            thought: `One day you will understand why certain doors remained closed.  
-    Why people left without warning.  
-    Why opportunities slipped.  
-    Not because you were unworthy—  
-    but because life was protecting you from smaller destinies.  
-    Trust the timing.  
-    Trust the redirections.`,
-            paws: 3999,
-            shares: 27
-        },
-        {
-            username: "alpha.mind",
-            thought: `You don’t truly change when life is soft.  
-    You change when life throws you into silence, forces you to stand alone.  
-    In that silence, you rebuild your truth.  
-    You stop craving validation.  
-    You start choosing yourself.  
-    That’s when real life begins.`,
-            paws: 3555,
-            shares: 26
-        },
-
-        // ---------- MORE SHORT & MEDIUM ----------
-        {
-            username: "moonlogic",
-            thought: "Your value is not up for negotiation.",
-            paws: 1901,
-            shares: 10
-        },
-        {
-            username: "wolfmind",
-            thought: "Protect your peace like it's oxygen.",
-            paws: 2150,
-            shares: 13
-        },
-        {
-            username: "codedbyfate",
-            thought: "If it costs your mental health, it's too expensive.",
-            paws: 1680,
-            shares: 7
-        },
-        {
-            username: "quietalpha",
-            thought: "Growth is painful, but staying the same is deadly.",
-            paws: 2402,
-            shares: 22
-        },
-        {
-            username: "life.engine",
-            thought: "Your future deserves a stronger you.",
-            paws: 1550,
-            shares: 6
-        },
-        {
-            username: "itxmuhammadjazib",
-            thought: "Not everyone deserves the unfiltered version of you.",
-            paws: 2041,
-            shares: 14
-        },
-        {
-            username: "coremind",
-            thought: "Your mindset is your true home.",
-            paws: 1300,
-            shares: 5
-        },
-        {
-            username: "rawtruth",
-            thought: "Let actions prove what words could never.",
-            paws: 1988,
-            shares: 10
-        },
-        {
-            username: "energyvault",
-            thought: "Stop watering dead plants.",
-            paws: 1666,
-            shares: 9
-        },
-        {
-            username: "solitude",
-            thought: "Better alone than badly accompanied.",
-            paws: 2210,
-            shares: 15
-        },
-        {
-            username: "truthhunter",
-            thought: "You owe loyalty only to those who earned it.",
-            paws: 1877,
-            shares: 10
-        },
-        {
-            username: "calmstorm",
-            thought: "Sometimes not reacting is the loudest reaction.",
-            paws: 2544,
-            shares: 17
-        },
-        {
-            username: "codedspirit",
-            thought: "A calm mind wins every battle.",
-            paws: 1733,
-            shares: 8
-        },
-        {
-            username: "wolf.alpha",
-            thought: "You lose people when you level up. It’s normal.",
-            paws: 2333,
-            shares: 14
-        },
-        {
-            username: "journaltide",
-            thought: `You are not behind.  
-    You are not late.  
-    You are exactly where your story needs you.  
-    Some chapters are slow, some are wild,  
-    but every page turns you into someone  
-    your past self wished to become.`,
-            paws: 3622,
-            shares: 30
-        }
-    ];
+    useEffect(() => {
+        const load = async () => {
+            try {
+                setLoading(true);
+                const res = await fetch(`/api/thoughts?limit=50`);
+                if (!res.ok) {
+                    const err = await res.text();
+                    console.error('API error:', res.status, err);
+                    // Use sample thoughts as fallback
+                    setThoughts(SAMPLE_THOUGHTS);
+                    return;
+                }
+                const data = await res.json();
+                console.log('Loaded thoughts:', data.data?.length || 0);
+                // Combine API data with sample thoughts if API returns fewer than 12
+                const apiThoughts = data.data || [];
+                if (apiThoughts.length === 0) {
+                    setThoughts(SAMPLE_THOUGHTS);
+                } else if (apiThoughts.length < 12) {
+                    setThoughts([...apiThoughts, ...SAMPLE_THOUGHTS.slice(apiThoughts.length)]);
+                } else {
+                    setThoughts(apiThoughts);
+                }
+            } catch (e) {
+                console.error('Fetch error:', e);
+                // Use sample thoughts as fallback on network error
+                setThoughts(SAMPLE_THOUGHTS);
+            } finally {
+                setLoading(false);
+            }
+        };
+        load();
+    }, []);
     
     const filteredThoughts = useMemo(() => {
         if (!filterText.trim()) return thoughts;
         const lower = filterText.toLowerCase();
-        return thoughts.filter(t => 
-            t.thought.toLowerCase().includes(lower) || 
-            t.username.toLowerCase().includes(lower)
-        );
-    }, [filterText]);
+        return thoughts.filter(t => {
+            const content = (t.content || t.thought || '').toLowerCase();
+            const author = (t.authorUsername || t.username || '').toLowerCase();
+            return content.includes(lower) || author.includes(lower);
+        });
+    }, [filterText, thoughts]);
 
     return (
         <div className={css.app}>
             <div className={css.col}>
                 <Header css={css} onSearch={setFilterText} onNewThought={() => setShowFocusMode(true)} />
                 <main>
-                    <div className={css.forest_header}>
-                        <h2>The Forest</h2>
-                        <p>Where honest thoughts find their roots, and quiet minds speak the loudest.</p>
-                    </div>
                     <div className={css.masonry}>
-                        {filteredThoughts.length > 0 ? (
+                        {loading ? (
+                            <div className={css.empty_state}>
+                                <p>Loading thoughts...</p>
+                            </div>
+                        ) : error ? (
+                            <div className={css.empty_state}>
+                                <p>Error: {error}</p>
+                                <small>Check console for details</small>
+                            </div>
+                        ) : filteredThoughts.length > 0 ? (
                             filteredThoughts.map((thought, index) => (<Thought key={index} data={thought} css={css} />))
                         ) : (
                             <div className={css.empty_state}>
@@ -262,14 +193,6 @@ const page = () => {
                         )}
                     </div>
                 </main>
-            </div>
-            
-            {/* Floating CTA for unauthenticated users */}
-            <div className={css.floating_cta}>
-                <Link href="/auth" className={css.cta_button}>
-                    <Sprout />
-                    <span>Plant Your First Thought</span>
-                </Link>
             </div>
 
             {/* Focus Mode Overlay */}
@@ -288,11 +211,26 @@ const page = () => {
                             <button className={css.focus_cancel} onClick={() => setShowFocusMode(false)}>
                                 Cancel
                             </button>
-                            <button className={css.focus_submit} onClick={() => {
-                                // TODO: Submit thought
-                                alert('Thought planted! (Coming soon)');
-                                setNewThought('');
-                                setShowFocusMode(false);
+                            <button className={css.focus_submit} onClick={async () => {
+                                try {
+                                    const res = await fetch('/api/thoughts', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ content: newThought })
+                                    });
+                                    if (res.status === 201) {
+                                        const t = await res.json();
+                                        setThoughts(prev => [t, ...prev]);
+                                        setNewThought('');
+                                        setShowFocusMode(false);
+                                    } else if (res.status === 401) {
+                                        alert('Please sign in to plant a thought');
+                                    } else {
+                                        alert('Failed to plant thought');
+                                    }
+                                } catch (e) {
+                                    alert('Network error');
+                                }
                             }}>
                                 Plant Thought
                             </button>
