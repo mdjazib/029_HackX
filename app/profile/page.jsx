@@ -1,10 +1,12 @@
 "use client"
 import React, { useMemo, useState, useEffect } from "react";
+import Image from "next/image";
 import { toast } from "sonner";
 import { Activity, Copy, Eye, EyeOff, Lock, Share2, Unlock, Plus, Heart, Bookmark } from "lucide-react";
 import Header from "@/components/Header";
 import Thought from "@/components/Thought";
 import CreateThoughtModal from "@/components/CreateThoughtModal";
+import ActivityHeatmap from "@/components/ActivityHeatmap";
 import css from "../app.module.sass";
 
 const ProfilePage = () => {
@@ -148,7 +150,7 @@ const ProfilePage = () => {
     return (
       <div className={css.app}>
         <div className={css.col}>
-          <Header css={css} />
+          <Header css={css} hideSearch showCreate />
           <main className={css.profile} style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <p>Loading profile...</p>
           </main>
@@ -161,7 +163,7 @@ const ProfilePage = () => {
     return (
       <div className={css.app}>
         <div className={css.col}>
-          <Header css={css} />
+          <Header css={css} hideSearch showCreate />
           <main className={css.profile} style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <p>Profile not found</p>
           </main>
@@ -173,12 +175,20 @@ const ProfilePage = () => {
   return (
     <div className={css.app}>
       <div className={css.col}>
-        <Header css={css} />
+        <Header css={css} hideSearch showCreate />
         <main className={`${css.profile}`}>
           {/* PROFILE HERO SECTION - SafeSpace Style */}
           <section className={css.profile_hero}>
             <div className={css.profile_identity}>
-              <div className={css.profile_avatar}>{profile.name?.charAt(0)}</div>
+              <div className={css.profile_avatar}>
+                <Image
+                  src="/avatar.png"
+                  width={80}
+                  height={80}
+                  alt={profile.name || "User avatar"}
+                  style={{ borderRadius: 18, objectFit: "cover" }}
+                />
+              </div>
               <div className={css.profile_headings}>
                 <p className={css.profile_handle}>@{profile.username}</p>
                 <h1>{profile.name}</h1>
@@ -227,6 +237,23 @@ const ProfilePage = () => {
                 </button>
               </div>
             </div>
+          </section>
+
+          {/* ACTIVITY HEATMAP */}
+          <section className={css.activity_section}>
+            <ActivityHeatmap
+              css={css}
+              events={[
+                // posts createdAt
+                ...posts.map((p) => p.createdAt).filter(Boolean),
+                // likes (pawprints)
+                ...likedPosts.map((p) => p.createdAt).filter(Boolean),
+                // saved
+                ...savedPosts.map((s) => s.createdAt).filter(Boolean),
+              ]}
+              weeks={12}
+              title="Activity"
+            />
           </section>
 
           {/* TABS - My Thoughts & My Pawprints */}

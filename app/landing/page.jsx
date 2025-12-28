@@ -17,7 +17,7 @@ const LandingPage = () => {
             A calm space for honest words. No followers. No noise. Just truth.
           </p>
           <div className={css.cta_group}>
-            <Link href="/auth" className={css.cta_primary}>
+            <Link href="/welcome" className={css.cta_primary}>
               Enter the Forest <ArrowRight size={16} />
             </Link>
             <Link href="/about" className={css.cta_secondary}>

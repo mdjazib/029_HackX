@@ -889,6 +889,7 @@ $base: var(--base-color)
     color: $text
     font-size: 28px
     @include flex()
+    overflow: hidden
     font-family: $logo
 
 .profile_headings h1
@@ -977,6 +978,64 @@ $base: var(--base-color)
 
 .profile_moodpanel
     @include flex($a:flex-start,$d:column,$g: 14px)
+
+// Activity Heatmap
+.activity_section
+    background-color: lch(from $base calc(l + 4) c h)
+    border: 1px solid lch(from $base calc(l + 12) c h)
+    border-radius: 12px
+    padding: 16px
+    display: flex
+    flex-direction: column
+    gap: 10px
+
+.activity_header h3
+    margin: 0
+    font-size: clamp(16px, 2.5vw, 18px)
+    color: $text
+
+.activity_heatmap
+    display: grid
+    grid-auto-flow: column
+    grid-auto-columns: min-content
+    gap: 4px
+    overflow-x: auto
+    padding-bottom: 6px
+    &::-webkit-scrollbar
+        height: 6px
+
+.activity_col
+    display: grid
+    grid-template-rows: repeat(7, 14px)
+    gap: 4px
+
+.activity_cell
+    width: 14px
+    height: 14px
+    border-radius: 3px
+    background-color: lch(from $base calc(l + 10) c h)
+    border: 1px solid lch(from $base calc(l + 12) c h)
+
+.lvl_0
+    background-color: lch(from $base calc(l + 9) c h)
+.lvl_1
+    background-color: lch(70 30 140)
+.lvl_2
+    background-color: lch(62 36 140)
+.lvl_3
+    background-color: lch(54 42 140)
+.lvl_4
+    background-color: lch(46 48 140)
+
+.activity_legend
+    display: flex
+    align-items: center
+    gap: 6px
+    color: lch(from $text calc(l - 20) c h)
+    font-size: 12px
+    .activity_cell
+        width: 10px
+        height: 10px
 
 .section_header
     width: 100%
@@ -1236,17 +1295,29 @@ $base: var(--base-color)
     top: 100%
     left: 0
     right: 0
-    background-color: $base
-    border: 1px solid lch(from $base calc(l + 12) c h)
-    border-top: none
-    border-radius: 0 0 8px 8px
-    padding: 12px
+    // Make the search card feel like a standalone, fully opaque panel
+    background: linear-gradient(180deg, lch(from $base calc(l + 8) c h), lch(from $base calc(l + 6) c h))
+    border: 1px solid lch(from $base calc(l + 14) c h)
+    border-radius: 14px
+    margin-top: 8px
+    padding: 14px
     display: flex
     flex-direction: column
-    gap: 12px
+    gap: 14px
     max-height: 400px
     overflow-y: auto
-    z-index: 100
+    z-index: 101
+    box-shadow: 0 18px 44px rgba(0,0,0,0.35), 0 1px 0 lch(from $accent calc(l + 4) c h 0.15) inset
+    // No backdrop blur; keep it crisp and separated
+
+.search_backdrop
+    position: fixed
+    inset: 0
+    // Slightly stronger dim to separate the card from the feed
+    background: linear-gradient(180deg, lch(from $base calc(l + 1) c h 0.45), lch(from $base calc(l + 3) c h 0.45))
+    backdrop-filter: blur(4px)
+    z-index: 5
+    pointer-events: none
 
 .search_modes
     display: flex
@@ -1268,12 +1339,21 @@ $base: var(--base-color)
         font-size: 12px
         color: lch(from $text calc(l - 15) c h)
     select
-        padding: 8px
-        border: 1px solid lch(from $base calc(l + 10) c h)
-        border-radius: 6px
-        background-color: lch(from $base calc(l + 2) c h)
+        padding: 10px 12px
+        border: 1px solid lch(from $accent calc(l + 5) c h 0.35)
+        border-radius: 10px
+        background: lch(from $base calc(l + 4) c h)
         color: $text
-        font-size: 12px
+        font-size: 13px
+        box-shadow: 0 6px 14px rgba(0,0,0,0.18)
+        transition: all 0.2s ease
+        width: 100%
+        &:focus
+            outline: none
+            border-color: lch(from $accent calc(l + 12) c h 0.6)
+            box-shadow: 0 0 0 2px lch(from $accent calc(l + 8) c h 0.25)
+        &:hover
+            border-color: lch(from $accent calc(l + 10) c h 0.5)
 
 .search_results
     display: flex

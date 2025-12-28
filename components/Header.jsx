@@ -1,7 +1,7 @@
 "use client"
 import { Plus, Search, X } from 'lucide-react'
 import Link from 'next/link'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Avatar from './Avatar'
 import { useRouter } from 'next/navigation'
 
@@ -14,7 +14,7 @@ const BambooIcon = () => (
     </svg>
 )
 
-const Header = ({ css, onSearch, onNewThought }) => {
+const Header = ({ css, onSearch, onCategoryChange, onNewThought, hideSearch = false, showCreate = false }) => {
     const [searchValue, setSearchValue] = useState("");
     const [searchType, setSearchType] = useState("keyword"); // "keyword" | "author"
     const [category, setCategory] = useState("all");
@@ -22,10 +22,21 @@ const Header = ({ css, onSearch, onNewThought }) => {
     const [searchResults, setSearchResults] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
     const router = useRouter();
+    const containerRef = useRef(null);
 
     const categories = ["all", "motivational", "poetry", "reflection", "creative-writing", "quote", "emotion"];
 
-    // Debounced search
+    // Bubble search text to parent for client-side filtering
+    useEffect(() => {
+        onSearch?.(searchValue);
+    }, [searchValue, onSearch]);
+
+    // Bubble category to parent for client-side filtering
+    useEffect(() => {
+        onCategoryChange?.(category);
+    }, [category, onCategoryChange]);
+
+    // Debounced server search (optional)
     useEffect(() => {
         if (!searchValue.trim()) {
             setSearchResults([]);
@@ -35,6 +46,28 @@ const Header = ({ css, onSearch, onNewThought }) => {
         const timer = setTimeout(() => performSearch(), 300);
         return () => clearTimeout(timer);
     }, [searchValue, searchType, category]);
+
+    // Close on click outside
+    useEffect(() => {
+        if (!showAdvanced) return;
+        const handleClick = (e) => {
+            if (containerRef.current && !containerRef.current.contains(e.target)) {
+                setShowAdvanced(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClick);
+        return () => document.removeEventListener('mousedown', handleClick);
+    }, [showAdvanced]);
+
+    // Close on ESC
+    useEffect(() => {
+        if (!showAdvanced) return;
+        const onKey = (e) => {
+            if (e.key === 'Escape') setShowAdvanced(false);
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [showAdvanced]);
 
     const performSearch = async () => {
         try {
@@ -77,7 +110,8 @@ const Header = ({ css, onSearch, onNewThought }) => {
         <header className={css.header}>
             <Link href={'/'} className={css.logo}>Nice Panda</Link>
             
-            <div className={css.search_container}>
+            {!hideSearch && (
+            <div className={css.search_container} ref={containerRef}>
                 <div className={css.search}>
                     <Search />
                     <input 
@@ -91,6 +125,7 @@ const Header = ({ css, onSearch, onNewThought }) => {
                         <button onClick={() => {
                             setSearchValue("");
                             setSearchResults([]);
+                            onSearch?.("");
                         }}>
                             <X size={16} />
                         </button>
@@ -167,15 +202,19 @@ const Header = ({ css, onSearch, onNewThought }) => {
                         )}
                     </div>
                 )}
+
+                {/* Removed backdrop to avoid dimming the page */}
             </div>
+            )}
 
             <div className={css.cta}>
-                <button onClick={handleNewThought} className={css.createpostbtn} title="Plant a Thought">
-                    <Plus />
-                </button>
-                <Link href={'/profile'} className={css.bamboo_icon} title="Your Bamboo">
-                    <BambooIcon />
-                </Link>
+                {showCreate && (
+                    <button onClick={handleNewThought} className={css.createpostbtn} title="Plant a Thought">
+                        <Plus />
+                    </button>
+                )}
+                {/* Show actual user avatar linking to profile */}
+                <Avatar css={css} url="/profile" img />
             </div>
         </header>
     )

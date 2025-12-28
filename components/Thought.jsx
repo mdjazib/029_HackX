@@ -25,6 +25,9 @@ const Thought = ({ data, css }) => {
                 toast.success('Pawprint removed', { duration: 1500 });
             }
 
+            // Skip server sync for sample (non-DB) items
+            if (data.isSample) return;
+
             // Try to sync with API
             const method = hasPawed ? 'DELETE' : 'POST';
             const query = hasPawed ? `?thoughtId=${data._id}` : '';
@@ -54,6 +57,9 @@ const Thought = ({ data, css }) => {
                 setHasSaved(false);
                 toast.success('Removed from saves', { duration: 1500 });
             }
+
+            // Skip server sync for sample (non-DB) items
+            if (data.isSample) return;
 
             // Try to sync with API
             const method = hasSaved ? 'DELETE' : 'POST';
